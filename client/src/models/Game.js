@@ -1,65 +1,68 @@
-let observer = null;
-let tiles = [
-  {
-    id: 1,
-    x: 0,
-    y: 0,
-    letter: 'a'
-  },
-  {
-    id: 2,
-    x: 1,
-    y: 0,
-    letter: 'b'
-  },
-  {
-    id: 3,
-    x: 2,
-    y: 3,
-    letter: 'c'
-  },
-  {
-    id: 4,
-    x: 3,
-    y: 2,
-    letter: 'd'
-  },
-  {
-    id: 5,
-    x: 4,
-    y: 9,
-    letter: 'e'
-  }
-]
+const tiles = []
 
-function emitChange() {
+function makeTileBank(){
+  const tileCounts = [
+    ['a', 2],
+    ['c', 1],
+    ['d', 1],
+    ['e', 2],
+    ['g', 1],
+    ['i', 5],
+    ['l', 2],
+    ['n', 2],
+    ['o', 1],
+    ['p', 1],
+    ['r', 2],
+    ['s', 1],
+    ['t', 3],
+    ['u', 1]
+  ]
+
+  let counter = 0
+  for (let i = 0; i < tileCounts.length; i++){
+    const tileLetter = tileCounts[i][0];
+    for (let j = 0; j < tileCounts[i][1]; j++){
+      const tile = {
+        letter: tileLetter,
+        x: i,
+        y: j
+      }
+      counter++;
+      tile.id = counter;
+      tiles.push(tile);
+    }
+  }
+}
+
+let observer = null
+function emitChange(){
+  console.log('tiles', tiles)
   observer(tiles);
 }
 
-function observe(renderFunction) {
+function observe(renderFunction){
   if (observer) {
-    throw new Error('Multiple observers not implemented.');
+    throw new Error('Multiple observers not implemented.')
   }
 
-  observer = renderFunction;
-  emitChange();
+  makeTileBank()
+  console.log('tiles', tiles)
+  observer = renderFunction
+  emitChange()
 }
 
 function findTileById(id){
-  const tileArray = tiles.filter((tile) => {
+  const tileInArray = tiles.filter((tile) => {
     return tile.id === id
   })
-  return tileArray[0]
+  return tileInArray[0]
 }
 
-function moveTile(tileId, toX, toY) {
+function moveTile(tileId, toX, toY){
   const tile = findTileById(tileId)
-  console.log('tile object', tile)
   tile.x = toX
   tile.y = toY
-  console.log('tile object', tile)
-  console.log('tiles after reset', tiles)
-  emitChange();
+  emitChange()
 }
 
-export {tiles, observe, moveTile}
+export {observe, tiles, moveTile}

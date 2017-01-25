@@ -29,7 +29,7 @@ class GridRow extends React.Component{
   render(){
     const squares = []
     const y = this.props.y
-    for (let x = 0; x < 10; x++) { 
+    for (let x = 0; x < 50; x++) { 
       squares.push(this.renderSquare(x, y))
     }
 

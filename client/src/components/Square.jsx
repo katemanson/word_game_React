@@ -5,16 +5,15 @@ import { DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants.js'
 
 const squareTarget = {
-  // canDrop(props){
-  //   if (this.hasChildNodes()){
-  //     return false
-  //   }
-  //   return true
-  // }, 
+  canDrop(props){
+    if (props.children){
+      return false
+    }
+    return true
+  }, 
 
   drop(props, monitor){
     const tileId = monitor.getItem().id
-    console.log('from drop target, tileId, target x and y', tileId, props.x, props.y)
     return moveTile(tileId, props.x, props.y)
   }
 }
@@ -30,14 +29,26 @@ class Square extends React.Component{
   render(){
     const { x, y, connectDropTarget, isOver } = this.props
 
-    const cellStyle = {
-      border: '1pt solid gray',
-      width: '58px',
-      height: '58px'
-    }
+    let overColor = null
+    if (isOver && !this.props.children){
+      overColor = '#FFE023'
+    } 
 
     return connectDropTarget(
-      <td style={cellStyle}>
+      <td style={{
+        width: '58px',
+        minWidth: '58px',
+        maxWidth: '58px',
+        height: '58px',
+        minHeight: '58px',
+        maxHeight: '58px',
+        border: '1pt solid gray',
+        borderSpacing: 0,
+        padding: 0,
+        margin: 0,
+        textAlign: 'center',
+        backgroundColor: 'overColor'
+      }}>
         {this.props.children}
       </td>
     )
