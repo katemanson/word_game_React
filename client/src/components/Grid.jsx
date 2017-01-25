@@ -1,5 +1,7 @@
 import React from 'react'
 import GridRow from './GridRow.jsx'
+import {DragDropContext} from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 class Grid extends React.Component{
 
@@ -25,4 +27,4 @@ Grid.propTypes = {
   tiles: React.PropTypes.arrayOf(React.PropTypes.object)
 }
 
-export default Grid
+export default DragDropContext(HTML5Backend)(Grid)

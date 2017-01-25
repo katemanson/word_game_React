@@ -1,27 +1,27 @@
 let observer = null;
 let tiles = [
   {
-    key: 1,
+    id: 1,
     position: [0,0],
     letter: 'a'
   },
   {
-    key: 2,
+    id: 2,
     position: [1,0],
     letter: 'b'
   },
   {
-    key: 3,
+    id: 3,
     position: [2,3],
     letter: 'c'
   },
   {
-    key: 4,
+    id: 4,
     position: [3,2],
     letter: 'd'
   },
   {
-    key: 5,
+    id: 5,
     position: [4,9],
     letter: 'e'
   }
@@ -31,12 +31,12 @@ function emitChange() {
   observer(tiles);
 }
 
-function observe(o) {
+function observe(renderFunction) {
   if (observer) {
     throw new Error('Multiple observers not implemented.');
   }
 
-  observer = o;
+  observer = renderFunction;
   emitChange();
 }
 

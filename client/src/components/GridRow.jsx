@@ -12,7 +12,7 @@ class GridRow extends React.Component{
     for (let i = 0; i < this.props.tiles.length; i++){
       const [tileX, tileY] = tiles[i].position
       if (x === tileX && y === tileY){
-        tile = <Tile letter={this.props.tiles[i].letter} /> 
+        tile = <Tile id={this.props.tiles[i].id} letter={this.props.tiles[i].letter} /> 
       }
     }  
 
