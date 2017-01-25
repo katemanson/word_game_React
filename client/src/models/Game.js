@@ -2,27 +2,32 @@ let observer = null;
 let tiles = [
   {
     id: 1,
-    position: [0,0],
+    x: 0,
+    y: 0,
     letter: 'a'
   },
   {
     id: 2,
-    position: [1,0],
+    x: 1,
+    y: 0,
     letter: 'b'
   },
   {
     id: 3,
-    position: [2,3],
+    x: 2,
+    y: 3,
     letter: 'c'
   },
   {
     id: 4,
-    position: [3,2],
+    x: 3,
+    y: 2,
     letter: 'd'
   },
   {
     id: 5,
-    position: [4,9],
+    x: 4,
+    y: 9,
     letter: 'e'
   }
 ]
@@ -40,9 +45,21 @@ function observe(renderFunction) {
   emitChange();
 }
 
-// function moveTile(toX, toY) {
-//   tilePosition = [toX, toY];
-//   emitChange();
-// }
+function findTileById(id){
+  const tileArray = tiles.filter((tile) => {
+    return tile.id === id
+  })
+  return tileArray[0]
+}
 
-export {observe, tiles}
+function moveTile(tileId, toX, toY) {
+  const tile = findTileById(tileId)
+  console.log('tile object', tile)
+  tile.x = toX
+  tile.y = toY
+  console.log('tile object', tile)
+  console.log('tiles after reset', tiles)
+  emitChange();
+}
+
+export {tiles, observe, moveTile}

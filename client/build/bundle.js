@@ -19811,9 +19811,8 @@
 	    value: function render() {
 	      var tRs = [];
 	      for (var y = 0; y < 10; y++) {
-	        tRs.push(_react2.default.createElement(_GridRow2.default, { key: y, yCoordinate: y, tiles: this.props.tiles }));
+	        tRs.push(_react2.default.createElement(_GridRow2.default, { key: y, y: y, tiles: this.props.tiles }));
 	      }
-	      console.log(this.props.tiles);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -19849,8 +19848,6 @@
 	  value: true
 	});
 	
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
@@ -19883,33 +19880,34 @@
 	  }
 	
 	  _createClass(GridRow, [{
-	    key: 'renderSquare',
-	    value: function renderSquare(x, y) {
-	
+	    key: 'renderTile',
+	    value: function renderTile(x, y) {
 	      var tiles = this.props.tiles;
 	      var tile = null;
 	
 	      for (var i = 0; i < this.props.tiles.length; i++) {
-	        var _tiles$i$position = _slicedToArray(tiles[i].position, 2),
-	            tileX = _tiles$i$position[0],
-	            tileY = _tiles$i$position[1];
+	        var tileX = tiles[i].x;
+	        var tileY = tiles[i].y;
 	
 	        if (x === tileX && y === tileY) {
-	          tile = _react2.default.createElement(_Tile2.default, { id: this.props.tiles[i].id, letter: this.props.tiles[i].letter });
+	          return tile = _react2.default.createElement(_Tile2.default, { id: this.props.tiles[i].id, letter: this.props.tiles[i].letter });
 	        }
 	      }
-	
+	    }
+	  }, {
+	    key: 'renderSquare',
+	    value: function renderSquare(x, y) {
 	      return _react2.default.createElement(
 	        _Square2.default,
-	        { key: [x, y] },
-	        tile
+	        { key: [x, y], x: x, y: y },
+	        this.renderTile(x, y)
 	      );
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var squares = [];
-	      var y = this.props.yCoordinate;
+	      var y = this.props.y;
 	      for (var x = 0; x < 10; x++) {
 	        squares.push(this.renderSquare(x, y));
 	      }
@@ -19926,6 +19924,7 @@
 	}(_react2.default.Component);
 	
 	GridRow.propTypes = {
+	  y: _react2.default.PropTypes.number.isRequired,
 	  tiles: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object)
 	};
 	
@@ -19951,6 +19950,12 @@
 	
 	var _Tile2 = _interopRequireDefault(_Tile);
 	
+	var _Game = __webpack_require__(332);
+	
+	var _reactDnd = __webpack_require__(164);
+	
+	var _Constants = __webpack_require__(163);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19958,6 +19963,28 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var squareTarget = {
+	  // canDrop(props){
+	  //   if (this.hasChildNodes()){
+	  //     return false
+	  //   }
+	  //   return true
+	  // }, 
+	
+	  drop: function drop(props, monitor) {
+	    var tileId = monitor.getItem().id;
+	    console.log('from drop target, tileId, target x and y', tileId, props.x, props.y);
+	    return (0, _Game.moveTile)(tileId, props.x, props.y);
+	  }
+	};
+	
+	function collect(connect, monitor) {
+	  return {
+	    connectDropTarget: connect.dropTarget(),
+	    isOver: monitor.isOver()
+	  };
+	}
 	
 	var Square = function (_React$Component) {
 	  _inherits(Square, _React$Component);
@@ -19971,24 +19998,38 @@
 	  _createClass(Square, [{
 	    key: 'render',
 	    value: function render() {
-	      var squareStyle = {
+	      var _props = this.props,
+	          x = _props.x,
+	          y = _props.y,
+	          connectDropTarget = _props.connectDropTarget,
+	          isOver = _props.isOver;
+	
+	
+	      var cellStyle = {
 	        border: '1pt solid gray',
 	        width: '58px',
 	        height: '58px'
 	      };
 	
-	      return _react2.default.createElement(
+	      return connectDropTarget(_react2.default.createElement(
 	        'td',
-	        { style: squareStyle },
+	        { style: cellStyle },
 	        this.props.children
-	      );
+	      ));
 	    }
 	  }]);
 	
 	  return Square;
 	}(_react2.default.Component);
 	
-	exports.default = Square;
+	Square.propTypes = {
+	  x: _react2.default.PropTypes.number.isRequired,
+	  y: _react2.default.PropTypes.number.isRequired,
+	  isOver: _react2.default.PropTypes.bool.isRequired,
+	  children: _react2.default.PropTypes.element
+	};
+	
+	exports.default = (0, _reactDnd.DropTarget)(_Constants.ItemTypes.TILE, squareTarget, collect)(Square);
 
 /***/ },
 /* 162 */
@@ -28445,23 +28486,28 @@
 	var observer = null;
 	var tiles = [{
 	  id: 1,
-	  position: [0, 0],
+	  x: 0,
+	  y: 0,
 	  letter: 'a'
 	}, {
 	  id: 2,
-	  position: [1, 0],
+	  x: 1,
+	  y: 0,
 	  letter: 'b'
 	}, {
 	  id: 3,
-	  position: [2, 3],
+	  x: 2,
+	  y: 3,
 	  letter: 'c'
 	}, {
 	  id: 4,
-	  position: [3, 2],
+	  x: 3,
+	  y: 2,
 	  letter: 'd'
 	}, {
 	  id: 5,
-	  position: [4, 9],
+	  x: 4,
+	  y: 9,
 	  letter: 'e'
 	}];
 	
@@ -28478,13 +28524,26 @@
 	  emitChange();
 	}
 	
-	// function moveTile(toX, toY) {
-	//   tilePosition = [toX, toY];
-	//   emitChange();
-	// }
+	function findTileById(id) {
+	  var tileArray = tiles.filter(function (tile) {
+	    return tile.id === id;
+	  });
+	  return tileArray[0];
+	}
 	
-	exports.observe = observe;
+	function moveTile(tileId, toX, toY) {
+	  var tile = findTileById(tileId);
+	  console.log('tile object', tile);
+	  tile.x = toX;
+	  tile.y = toY;
+	  console.log('tile object', tile);
+	  console.log('tiles after reset', tiles);
+	  emitChange();
+	}
+	
 	exports.tiles = tiles;
+	exports.observe = observe;
+	exports.moveTile = moveTile;
 
 /***/ }
 /******/ ]);
