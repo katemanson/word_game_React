@@ -45,6 +45,7 @@ function observe(renderFunction){
     throw new Error('Multiple observers not implemented.')
   }
 
+  checkWord('lenticular')
   makeTileBank()
   console.log('tiles', tiles)
   observer = renderFunction
@@ -63,6 +64,27 @@ function moveTile(tileId, toX, toY){
   tile.x = toX
   tile.y = toY
   emitChange()
+}
+
+function checkWord(word){  
+  var url = 'http://localhost:3000/dictionary'
+  var data = JSON.stringify({word: word});
+
+  var request = new XMLHttpRequest();
+  request.open("POST", url);
+  request.setRequestHeader('Content-Type', 'application/json')
+  request.onload = function(){
+    console.log(request.status);
+    if (request.status === 200){
+      var wordEntry = JSON.parse(request.responseText);
+      if (Object.keys(wordEntry.entry).length){
+        console.log('wordEntry.entry.scrabble: ', parseInt(wordEntry.entry.scrabble))
+      } else {
+        console.log('no entry; not a word')
+      }
+    }
+  }
+  request.send(data);
 }
 
 export {observe, tiles, moveTile}

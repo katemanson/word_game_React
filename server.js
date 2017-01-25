@@ -35,7 +35,7 @@ app.post('/dictionary', function(req, res){
     .end()
 });
 
-app.use(express.static('client/build'));
+app.use(express.static(path.join(__dirname + '/client/build')));
 
 var server = app.listen(3000, function () {
   var host = server.address().address;

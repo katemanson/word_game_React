@@ -13,7 +13,7 @@ class HandContainer extends React.Component{
       bottom: 0,
       left: 0,
       width: '100%',
-      height: '70px',
+      height: '65px',
       backgroundColor: 'rgba(255, 224, 35, 0.2)'
     }
 
