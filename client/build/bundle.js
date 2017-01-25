@@ -58,7 +58,7 @@
 	
 	var _Grid2 = _interopRequireDefault(_Grid);
 	
-	var _Game = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../Game.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _Game = __webpack_require__(163);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -20048,6 +20048,59 @@
 	}(_react2.default.Component);
 	
 	exports.default = Tile;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var observer = null;
+	var tiles = [{
+	  key: 1,
+	  position: [0, 0],
+	  letter: 'a'
+	}, {
+	  key: 2,
+	  position: [1, 0],
+	  letter: 'b'
+	}, {
+	  key: 3,
+	  position: [2, 3],
+	  letter: 'c'
+	}, {
+	  key: 4,
+	  position: [3, 2],
+	  letter: 'd'
+	}, {
+	  key: 5,
+	  position: [4, 9],
+	  letter: 'e'
+	}];
+	
+	function emitChange() {
+	  observer(tiles);
+	}
+	
+	function observe(o) {
+	  if (observer) {
+	    throw new Error('Multiple observers not implemented.');
+	  }
+	
+	  observer = o;
+	  emitChange();
+	}
+	
+	// function moveTile(toX, toY) {
+	//   tilePosition = [toX, toY];
+	//   emitChange();
+	// }
+	
+	exports.observe = observe;
+	exports.tiles = tiles;
 
 /***/ }
 /******/ ]);

@@ -1,4 +1,5 @@
-const tiles = [
+let observer = null;
+let tiles = [
   {
     key: 1,
     position: [0,0],
@@ -25,5 +26,23 @@ const tiles = [
     letter: 'e'
   }
 ]
+
+function emitChange() {
+  observer(tiles);
+}
+
+function observe(o) {
+  if (observer) {
+    throw new Error('Multiple observers not implemented.');
+  }
+
+  observer = o;
+  emitChange();
+}
+
+// function moveTile(toX, toY) {
+//   tilePosition = [toX, toY];
+//   emitChange();
+// }
 
 export {observe, tiles}
