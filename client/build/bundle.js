@@ -26625,6 +26625,157 @@
 	  request.send(data);
 	}
 	
+	//? Next method requires either "column" or "row" (as String) as parameter.
+	// Don't think this is clear enough in the code.
+	function getWordsIn(specifyColumnOrRow) {
+	  //find the min and max column/row numbers
+	  var handSortedByColumnOrRow = sortBy(this.hand, [function (tile) {
+	    return tile.gridPosition[specifyColumnOrRow];
+	  }]);
+	  var firstColumnOrRow = handSortedByColumnOrRow[0].gridPosition[specifyColumnOrRow];
+	  var lastColumnOrRow = handSortedByColumnOrRow[handSortedByColumnOrRow.length - 1].gridPosition[specifyColumnOrRow];
+	
+	  //group tiles in the same column/row
+	  var handGroupedByColumnOrRow = [];
+	  for (var i = firstColumnOrRow; i <= lastColumnOrRow; i++) {
+	    var tilesInColumnOrRowI = handSortedByColumnOrRow.filter(function (tile) {
+	      return tile.gridPosition[specifyColumnOrRow] === i;
+	    });
+	    handGroupedByColumnOrRow.push(tilesInColumnOrRowI);
+	  }
+	
+	  //order by row/column number
+	  var specifyRowOrColumn = "";
+	  if (specifyColumnOrRow === "column") {
+	    specifyRowOrColumn = "row";
+	  } else {
+	    specifyRowOrColumn = "column";
+	  }
+	
+	  var handGroupedByColumnOrRowSortedByRowOrColumn = [];
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = handGroupedByColumnOrRow[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var group = _step.value;
+	
+	      var sortedByRowOrColumn = sortBy(group, [function (tile) {
+	        return tile.gridPosition[specifyRowOrColumn];
+	      }]);
+	      handGroupedByColumnOrRowSortedByRowOrColumn.push(sortedByRowOrColumn);
+	    }
+	
+	    //group tiles with consecutive row/column numbers
+	    /*  Note: the following bit (with the nested for loops and if statements)
+	        is based on the first answer at
+	        http://stackoverflow.com/questions/22627125/grouping-consecutive-elements-together-using-javascript */
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	
+	  var tilesFormingWords = [];
+	  var difference;
+	  var holder = [];
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+	
+	  try {
+	    for (var _iterator2 = handGroupedByColumnOrRowSortedByRowOrColumn[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var group = _step2.value;
+	
+	      for (var i = 0; i < group.length; i++) {
+	        if (difference !== group[i].gridPosition[specifyRowOrColumn] - i && difference !== undefined) {
+	          if (holder.length > 1) {
+	            tilesFormingWords.push(holder);
+	          }
+	          holder = [];
+	        }
+	        difference = group[i].gridPosition[specifyRowOrColumn] - i;
+	        holder.push(group[i]);
+	      }
+	      if (holder.length) {
+	        if (holder.length > 1) {
+	          tilesFormingWords.push(holder);
+	        }
+	        holder = [];
+	      }
+	      difference = undefined;
+	    }
+	
+	    //for consecutive tiles, concatenate letters to make words, add each word
+	    //to player's this.words array
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+	
+	  var lettersOfWord = [];
+	  var word = "";
+	  var _iteratorNormalCompletion3 = true;
+	  var _didIteratorError3 = false;
+	  var _iteratorError3 = undefined;
+	
+	  try {
+	    for (var _iterator3 = tilesFormingWords[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	      var tilesFormingWord = _step3.value;
+	
+	      lettersOfWord = tilesFormingWord.map(function (tile) {
+	        return tile.letter;
+	      });
+	      word = lettersOfWord.join("");
+	      this.words.push(word);
+	      lettersOfWord = [];
+	      word = "";
+	    }
+	  } catch (err) {
+	    _didIteratorError3 = true;
+	    _iteratorError3 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	        _iterator3.return();
+	      }
+	    } finally {
+	      if (_didIteratorError3) {
+	        throw _iteratorError3;
+	      }
+	    }
+	  }
+	}
+	
+	function getWords() {
+	  //ToDo: Is this if statement needed?
+	  if (this.words.length) {
+	    this.words = [];
+	  }
+	  this.getWordsIn("column");
+	  this.getWordsIn("row");
+	}
+	
 	exports.observe = observe;
 	exports.tiles = tiles;
 	exports.moveTile = moveTile;

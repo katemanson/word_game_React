@@ -18,7 +18,7 @@ app.post('/dictionary', function(req, res){
     let data = '';
 
     response.on('data', function(chunk) {
-      data += chunk
+      data += chunk;
     });
 
     response.on('end', function() {
@@ -30,12 +30,12 @@ app.post('/dictionary', function(req, res){
 
   var options = {
     hostname: 'www.wordgamedictionary.com', 
-    path: path,
+    path: path
   }
 
   http
     .get(options, callback)
-    .end()
+    .end();
 });
 
 app.use(express.static(path.join(__dirname + '/client/build')));
