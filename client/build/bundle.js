@@ -26554,7 +26554,7 @@
 	var tiles = [];
 	
 	function makeTileBank() {
-	  var tileCounts = [['a', 2], ['c', 1], ['d', 1], ['e', 2], ['g', 1], ['i', 5], ['l', 2], ['n', 2], ['o', 1], ['p', 1], ['r', 2], ['s', 1], ['t', 3], ['u', 1]];
+	  var tileCounts = [['a', 1], ['c', 1], ['e', 2], ['i', 2], ['l', 4], ['n', 2], ['r', 1], ['t', 1], ['u', 1]];
 	
 	  var counter = 0;
 	  for (var i = 0; i < tileCounts.length; i++) {
