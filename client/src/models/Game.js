@@ -1,3 +1,5 @@
+import sortBy from 'lodash/sortBy'
+
 const tiles = []
 
 function makeTileBank(){
