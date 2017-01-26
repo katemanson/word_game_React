@@ -9,6 +9,7 @@ This is an individual project begun in Week 16 (the final week) of the immersive
 * JavaScript (ES6, mostly)
 * React
 * [React DnD](https://react-dnd.github.io/react-dnd/) with HTML5 backend (drag and drop package)
+* Node.js
 * Express (lightweight web framework)
 * Babel (ES6 to ES5 compiler)
 * webpack (module bundler)
