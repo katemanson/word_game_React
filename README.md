@@ -1,6 +1,6 @@
 #Word game: React version
 
-This is an individual project begun in Week 16 (the final week) of the immersive coding course at [CodeClan](https://codeclan.com/). 
+This is an ongoing individual project, begun in Week 16 (the final week) of the immersive coding course at [CodeClan](https://codeclan.com/). 
 
 It develops an [earlier personal project](https://github.com/katemanson/word_game), converting it from JavaScript-only to use React. 
 
