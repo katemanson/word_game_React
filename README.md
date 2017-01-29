@@ -23,3 +23,4 @@ At the moment what it does is populate a grid with letter tiles, which can then 
 * webpack (module bundler)
 * lodash (JavaScript utility library)
 * xml2json (converter)
+* HTML and CSS
